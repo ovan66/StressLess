@@ -1,4 +1,4 @@
-package cl.bastian.stressless;
+package cl.bastian.stressless.views;
 
 import android.app.Dialog;
 import android.net.Uri;
@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
@@ -18,19 +19,21 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+import cl.bastian.stressless.R;
+import cl.bastian.stressless.models.Pending;
+
+public class MainActivity extends AppCompatActivity implements CreateCallback{
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pendingDialog();
+
             }
         });
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     private void pendingDialog() {
@@ -66,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String pendingName = pendingImput.getText().toString();
                 dialog.dismiss();
+                PendingValidation pendingValidation = new PendingValidation(MainActivity.this);
+                pendingValidation.init(pendingName);
             }
         });
 
@@ -105,39 +109,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
+
+    @Override
+    public void succes(Pending pending) {
+        Toast.makeText(this, pending.getName(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void fail() {
+        Toast.makeText(this, "Un nombre por favor", Toast.LENGTH_SHORT).show();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
     }
 }

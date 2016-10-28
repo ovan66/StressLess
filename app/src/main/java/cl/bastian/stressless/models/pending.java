@@ -6,12 +6,12 @@ import com.orm.SugarRecord;
  * Created by santo_000 on 26-10-2016.
  */
 
-public class pending extends SugarRecord {
+public class Pending extends SugarRecord {
 
     private String name, description;
     private boolean done;
 
-    public pending() {
+    public Pending() {
     }
 
     public String getName() {
