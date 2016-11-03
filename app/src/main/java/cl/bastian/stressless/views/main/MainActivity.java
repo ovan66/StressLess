@@ -1,14 +1,11 @@
-package cl.bastian.stressless.views;
+package cl.bastian.stressless.views.main;
 
 import android.app.Dialog;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
@@ -16,23 +13,21 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-
-import java.util.List;
-
 import cl.bastian.stressless.R;
 import cl.bastian.stressless.models.Pending;
+import cl.bastian.stressless.views.main.pedingList.PendingListFragment;
 
 public class MainActivity extends AppCompatActivity implements CreateCallback{
+
+    private Dialog dialog;
+    private PendingListFragment pendingListFragment;
+
 
 
     @Override
@@ -41,20 +36,27 @@ public class MainActivity extends AppCompatActivity implements CreateCallback{
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        pendingListFragment = (PendingListFragment) getSupportFragmentManager().findFragmentById(R.id.pendingListFragment);
+
+        setDialog();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pendingDialog();
+                EditText pendingImput = (EditText) dialog.findViewById(R.id.pendingEt);
+                pendingImput.setText("");
+                dialog.show();
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_FORCED);
 
             }
         });
 
     }
 
-    private void pendingDialog() {
-        final Dialog dialog = new Dialog(this);
+    private void setDialog() {
+        dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_create_pending);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -67,9 +69,7 @@ public class MainActivity extends AppCompatActivity implements CreateCallback{
             @Override
             public void onClick(View v) {
                 String pendingName = pendingImput.getText().toString();
-                dialog.dismiss();
-                PendingValidation pendingValidation = new PendingValidation(MainActivity.this);
-                pendingValidation.init(pendingName);
+                createPending(pendingName);
             }
         });
 
@@ -82,10 +82,18 @@ public class MainActivity extends AppCompatActivity implements CreateCallback{
                 return false;
             }
         });
-
-        dialog.show();
-
     }
+
+        private void createPending (String name){
+            PendingValidation pendingValidation = new PendingValidation(this);
+            pendingValidation.init(name);
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+            dialog.dismiss();
+
+
+        }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements CreateCallback{
 
     @Override
     public void succes(Pending pending) {
-        Toast.makeText(this, pending.getName(), Toast.LENGTH_SHORT).show();
+        pendingListFragment.addPending(pending);
 
     }
 

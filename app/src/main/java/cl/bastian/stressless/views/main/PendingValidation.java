@@ -1,4 +1,4 @@
-package cl.bastian.stressless.views;
+package cl.bastian.stressless.views.main;
 
 import cl.bastian.stressless.models.Pending;
 

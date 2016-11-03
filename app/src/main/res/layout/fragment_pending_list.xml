@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cl.bastian.stressless.views.MainActivityFragment"
+    tools:context="cl.bastian.stressless.views.main.pedingList.PendingListFragment"
     tools:showIn="@layout/activity_main"/>
 

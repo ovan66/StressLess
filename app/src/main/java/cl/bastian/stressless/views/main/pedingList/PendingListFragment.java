@@ -1,5 +1,6 @@
-package cl.bastian.stressless.views;
+package cl.bastian.stressless.views.main.pedingList;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,19 +13,24 @@ import android.view.ViewGroup;
 import cl.bastian.stressless.R;
 import cl.bastian.stressless.adapters.PendingsAdapter;
 import cl.bastian.stressless.models.Pending;
+import cl.bastian.stressless.views.details.DetailsActivity;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class PendingListFragment extends Fragment implements PendingListListener{
 
-    public MainActivityFragment() {
+    public static final String PENDING_ID = "PENDING_ID";
+
+    private PendingsAdapter pendingsAdapter;
+
+    public PendingListFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_pending_list, container, false);
     }
 
     @Override
@@ -35,8 +41,20 @@ public class MainActivityFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        PendingsAdapter pendingsAdapter = new PendingsAdapter();
+        pendingsAdapter = new PendingsAdapter(this);
         recyclerView.setAdapter(pendingsAdapter);
+    }
+
+    public void addPending(Pending pending){
+        pendingsAdapter.add(pending);
+
+    }
+
+    @Override
+    public void click(long id) {
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(PENDING_ID,id);
+        startActivity(intent);
 
     }
 }
