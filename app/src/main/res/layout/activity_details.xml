@@ -10,4 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cl.bastian.stressless.views.details.DetailsActivity">
 
+
+    <EditText
+        android:id="@+id/descriptionEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_withe_bordered_primary_light"
+        android:hint="Agregue una descripcion o comentario"
+        android:lines="5"
+        android:padding="8dp" />
 </RelativeLayout>

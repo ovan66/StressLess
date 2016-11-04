@@ -81,6 +81,24 @@ public class PendingsAdapter extends RecyclerView.Adapter<PendingsAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void search(String name){
+        List<Pending> pendingsList = new PendingsData(). byName(name);
+        pendings.clear();
+        pendings.addAll(pendingsList);
+        notifyDataSetChanged();
+
+    }
+    public void reset(){
+        pendings.clear();;
+        List<Pending> pendingList= new PendingsData().notDone();
+        pendings.addAll(pendingList);
+        notifyDataSetChanged();
+    }
+
+
+
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         CheckBox status;

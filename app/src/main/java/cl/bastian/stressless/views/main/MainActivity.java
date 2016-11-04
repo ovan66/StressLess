@@ -22,8 +22,9 @@ import android.widget.Toast;
 import cl.bastian.stressless.R;
 import cl.bastian.stressless.models.Pending;
 import cl.bastian.stressless.views.main.pedingList.PendingListFragment;
+import cl.bastian.stressless.views.main.searchBar.SearchCallback;
 
-public class MainActivity extends AppCompatActivity implements CreateCallback{
+public class MainActivity extends AppCompatActivity implements CreateCallback, SearchCallback{
 
     private Dialog dialog;
     private PendingListFragment pendingListFragment;
@@ -128,5 +129,10 @@ public class MainActivity extends AppCompatActivity implements CreateCallback{
     public void fail() {
         Toast.makeText(this, "Un nombre por favor", Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void search(String name) {
+        pendingListFragment.search(name);
     }
 }
