@@ -23,11 +23,13 @@ import cl.bastian.stressless.R;
 import cl.bastian.stressless.models.Pending;
 import cl.bastian.stressless.views.main.pedingList.PendingListFragment;
 import cl.bastian.stressless.views.main.searchBar.SearchCallback;
+import cl.bastian.stressless.views.main.searchBar.SearchFragment;
 
 public class MainActivity extends AppCompatActivity implements CreateCallback, SearchCallback{
 
     private Dialog dialog;
     private PendingListFragment pendingListFragment;
+    private SearchFragment searchFragment;
 
 
 
@@ -37,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements CreateCallback, S
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         pendingListFragment = (PendingListFragment) getSupportFragmentManager().findFragmentById(R.id.pendingListFragment);
+        searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.searchFragment);
 
         setDialog();
 
@@ -122,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements CreateCallback, S
     @Override
     public void succes(Pending pending) {
         pendingListFragment.addPending(pending);
+        searchFragment.addSugestion(pending.getName());
+
 
     }
 

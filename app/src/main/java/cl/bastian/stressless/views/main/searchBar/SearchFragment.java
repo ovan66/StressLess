@@ -22,6 +22,8 @@ import java.util.List;
 import cl.bastian.stressless.R;
 import cl.bastian.stressless.data.PendingsData;
 
+import static java.security.AccessController.getContext;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -112,5 +114,10 @@ public class SearchFragment extends Fragment {
             }
         });
 
+    }
+
+    public void addSugestion(String name) {
+        sugestions.add(name);
+        adapter.notifyDataSetChanged();
     }
 }
